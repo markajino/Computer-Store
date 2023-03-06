@@ -1,0 +1,18 @@
+section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 2rem;
+}
+section>div{
+    min-width: 30%;
+    margin: auto;
+}
+.buy_now_btn{
+    background-color: #51c5f4;
+}
+.bank_btn{background-color: #edef4c;}
+.work_btn{background-color: #4d70f0;color: white;}
+.work_btn,.bank_btn{width: 5rem;}
+.get_a_loan{background-color: #4cf0a1;}
+.repay_loan{background-color: #a9f370;}

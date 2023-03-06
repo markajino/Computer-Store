@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kumputer Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        section{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 2rem;
+        }
+        section>div{
+            min-width: 30%;
+            margin: auto;
+        }
+        .buy_now_btn{
+            background-color: #51c5f4;
+        }
+        .bank_btn{background-color: #edef4c;}
+        .work_btn{background-color: #4d70f0;color: white;}
+        .work_btn,.bank_btn{width: 5rem;}
+        .get_a_loan{background-color: #4cf0a1;}
+        .repay_loan{background-color: #a9f370;}
+    </style>
+</head>
+<body>
+    
+
+    <header class="bg-black h-16 text-white font-bold mt-auto p-4">
+        <h1>Komputer Store</h1>
+    </header>
+    <section class="space-x-8 space-y-10">
+        <div>
+            <div class="space-y-14 shadow bg-grey-900 p-5  shadow-2xl">
+                <div class="space-y-2 joe_banker">
+                    <p class="font-bold	text-3xl">Joe Banker</p>
+                    <div class="flex flex-row justify-between">
+                        <p>Balance</p>
+                        <p class="currency">€ 200</p>
+                    </div>
+                </div>
+                <div id="banker_btn">
+                    <button class="get_a_loan py-3 px-2 rounded-lg w-full" onclick="get_a_loan()">Get a Loan</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="space-y-14 shadow bg-grey-900 p-5  shadow-2xl">
+                <div class="space-y-2">
+                    <p class="font-bold	text-3xl">Work</p>
+                    <div class="flex flex-row justify-between">
+                        <p>Pay</p>
+                        <p class="work_currency">€ 0</p>
+                    </div>
+                </div>
+                <div class="flex flex-row space-x-4">
+                    <button class="bank_btn py-3 px-2 rounded-lg" onclick="working_bank()">Bank</button>
+                    <button class="work_btn py-3 px-2 rounded-lg" onclick="working_btn()">Work</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="space-y-14 shadow bg-grey-900 p-5  shadow-2xl">
+                <div class="space-y-2">
+                    <p class="font-bold	text-3xl">Laptops</p>
+                    <select name="" id="select_laptop" onchange="updateSelection()" class="border-2 border-gray-200 focus:outline-none">
+                        
+                    </select>
+                </div>
+                <div class="mt-6">
+                   <h2 class="font-bold text-lg">Features:</h2>
+                   <div id="features">
+                       
+                   </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between p-3 shadow bg-grey-900 p-5 shadow-2xl space-x-3">
+                <div><img id="lapimg" style="max-width: 20rem;height: auto;" src="https://hickory-quilled-actress.glitch.me/assets/images/1.png" alt=""></div>
+                <div class="flex flex-col self-center " id="title_desc">
+                    <p class="text-lg font-bold">Intel Celeron</p>
+                    <p>This laptop will turn on It is perfect for the first time user who like to have a computer around!</p>
+                </div>
+                <div class="self-center flex flex-col min-w-fit space-y-6">
+                    <h2 class="font-bold text-2xl" id="price">1500 €</h2>
+                    <button class="font-bold buy_now_btn py-2 px-1 rounded-lg" onclick="buy_now()">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+<script>
+    let currencyText = document.querySelector(".currency").innerText;
+    let val = currencyText.replace(/[^0-9,.-]/g, "").replace(",", ".");
+    // console.log(Number(val))
+    let crr = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val);
+    currencyText.innerText = crr;
+
+        // console.log(val)
+
+    function $(ele){
+        return document.querySelectorAll(ele);
+    }
+
+    function buy_now(){
+        if(Number(replacestring($(".currency")[0].innerText)) >= Number(replacestring($("#price")[0].innerText))){
+            let balance = Number(replacestring($(".currency")[0].innerText)) - Number(replacestring($("#price")[0].innerText))
+            $(".currency")[0].innerText = balance;
+            alert("you are now the owner of the new laptop!");
+        }else{
+            alert("you cannot afford the laptop");
+        }
+    }
+
+        let get_a_loan = () => {
+            // const bankBalance = window.prompt("Please enter your bank balance:", `${val}`);
+            // const balance = parseFloat(bankBalance);
+            const maxLoan = Number(replacestring($(".currency")[0].innerText)) * 2.00;
+            const loanAmount = window.prompt(`Please enter your loan amount (maximum: ${maxLoan}):`);
+            const loan = parseFloat(loanAmount);
+            if(loanAmount == null || loanAmount == 0){return}
+            if (loan > maxLoan) {
+                window.alert(`Error: Loan amount cannot be more than ${maxLoan}`);
+            }else{
+                $("#banker_btn")[0].innerHTML = `<button class="repay_loan py-3 px-2 rounded-lg w-full mt-4" onclick="repay_loan ()">Repay Loan</button>`;
+                $(".joe_banker")[0].innerHTML += `<div class="flex flex-row justify-between loantxt">
+                                                        <p>Loan Amount</p>
+                                                        <p class="loan_amt">€ ${loan}</p>
+                                                    </div>`
+                $(".currency")[0].innerText = `€ ${Number(replacestring($(".currency")[0].innerText)) + loan}`;
+            }
+        }
+
+        let toggleloan = () => {
+            $(".repay_loan")[0].innerHTML = '';
+            $(".loantxt")[0].innerHTML = '';
+            $("#banker_btn")[0].innerHTML = `<button class="get_a_loan py-3 px-2 rounded-lg w-full" onclick="get_a_loan()">Get a Loan</button>`;
+        }
+
+        function repay_loan(){
+            let work_pay = Number(replacestring($(".work_currency")[0].innerText));
+            let loan_amt = Number(replacestring($(".loan_amt")[0].innerText));
+
+            if(work_pay>loan_amt){
+                // $(".work_currency")[0].innerText = `€ ${work_pay-loan_amt}`;
+                $(".currency")[0].innerText = `€ ${Number(replacestring($(".currency")[0].innerText)) + (work_pay-loan_amt)}`;
+                $(".work_currency")[0].innerText = `€ 0`;
+                $(".loan_amt")[0].innerText = '€ 0';
+                $(".loantxt")[0].innerHTML = '';
+                toggleloan()
+
+            }else if(work_pay == 0 || loan_amt == 0){
+                return
+            }
+            else{
+                $(".loan_amt")[0].innerText = loan_amt-work_pay;
+                $(".work_currency")[0].innerText = '€ 0';
+
+            }
+        }
+
+        let working_bank = () => {
+            if($(".loan_amt")[0]){
+                let workCurr = Number(replacestring($(".work_currency")[0].innerText));
+                if(workCurr != 0){
+                    let loanamt = Number(replacestring($(".loan_amt")[0].innerText));
+                    let cur_rency = Number(replacestring($(".currency")[0].innerText));
+                    let ten = workCurr*10/100;
+                    let remaining = loanamt - ten;
+                    if(remaining < 0){
+                        let rest = workCurr+cur_rency;
+                        $(".currency")[0].innerText = `€ ${rest}`;
+                        $(".work_currency")[0].innerText = `€ 0`;
+                        $(".loantxt")[0].innerHTML = '';
+                        $("#banker_btn")[0].innerHTML = '';
+                        $("#banker_btn")[0].innerHTML = `<button class="get_a_loan py-3 px-2 rounded-lg w-full" onclick="get_a_loan()">Get a Loan</button>`;
+                    }else{
+                        let rest = (workCurr - ten)+cur_rency;
+                        $(".currency")[0].innerText = `€ ${rest}`;
+                        $(".loan_amt")[0].innerHTML = `€ ${remaining}`;
+                        $(".work_currency")[0].innerText = `€ 0`;
+                    }
+                }
+
+                // if(loanamt>workCurr){
+                //     $(".loan_amt")[0].innerText = Number(loanamt - workCurr)
+                //     $(".work_currency")[0].innerText = 0
+                // }else{
+                //     $(".work_currency")[0].innerText = Number(workCurr - loanamt)
+                //     $(".loan_amt")[0].innerText = 0;
+                //     toggleloan();
+                    
+                // }
+            }else{
+                if(Number(replacestring($(".work_currency")[0].innerText) == 0)){
+                    return;
+                }else{
+                        $(".currency")[0].innerText = '€ '+ (Number(replacestring($(".currency")[0].innerText)) + Number(replacestring($(".work_currency")[0].innerText)));
+                        $(".work_currency")[0].innerText = '€ '+ 0;
+                        
+                }
+            }
+        }
+
+        let balance = 0;
+        let working_btn = () => {
+            // let value = document.querySelector(".work_currency");
+            // balance += 100;
+            // value.textContent = balance.toFixed(2);
+            // console.log()
+            $(".work_currency")[0].innerText = `€ ${Number(replacestring($(".work_currency")[0].innerText)) + 100}`;
+            // let ten = (balance*10)/100;
+            // console.log(Number(replacestring($(".loan_amt")[0].innerText))-ten);
+            // let loan_amt = Number(replacestring($(".loan_amt")[0].innerText));
+            // let currPay = Number(replacestring($(".work_currency")[0].innerText));
+            if($(".loan_amt")[0] != null){
+                if(Number(replacestring($(".work_currency"))[0].innerText) == 0){
+                    return
+                }else{
+                    // console.log(currPay - ((currPay*10)/100) + "-" + ((currPay*10)/100))
+                    // console.log(loan_amt - ((currPay*10)/100) + "-" + ((currPay*10)/100))
+                    // $(".work_currency")[0].innerHTML = currPay - ((currPay*10)/100) 
+                    // $(".loan_amt")[0].innerHTML = loan_amt - ((currPay*10)/100) 
+
+                }
+
+                if(currPay > loan_amt){
+                    // $(".work_currency")[0].innerHTML = currPay - (currPay*10)/100;
+                    // $(".loan_amt")[0].innerHTML = 0;
+                }else{
+                    // $(".loan_amt")[0].innerHTML = loan_amt-ten
+                    // $(".work_currency")[0].innerHTML = 0
+                    // console.log(loan_amt-currPay)
+
+                }
+                // if(ten> currPay){
+                //     console.log(ten-currPay);
+                //     console.log("ten "+ten)
+                // }else{
+                    
+                //     console.log(currPay-ten);
+                //     console.log("curr " +currPay)
+                // }
+            }else{
+                // alert("change")
+            }
+        }
+
+
+        function replacestring(txt){
+            return txt.replace(/[^0-9,.-]/g, "").replace(",", ".");
+        }
+
+
+
+        let features = document.querySelector("#features");
+        let select_laptop = document.querySelector("#select_laptop");
+
+            let data = fetch("https://hickory-quilled-actress.glitch.me/computers")
+                        .then(dt => dt.json())
+                        .then(res => {
+                            // console.log(res)
+                            for(let i=0;i<res.length;i++){
+                                select_laptop.innerHTML += `<option class='titlename' id='${res[i]['id']}'>${res[i]['title']}</option>`;
+                            }
+                            $("#title_desc>p")[0].innerText = res[0].title;
+                            $("#title_desc>p")[1].innerText = res[0].description;
+                            $("#price")[0].innerText = res[0].price + " €";
+                            $("#lapimg").src = "https://hickory-quilled-actress.glitch.me/"+res[0].image;
+                            for(let i=0;i<res[0]['specs'].length;i++){
+                                $("#features")[0].innerHTML += `<p>${res[0]['specs'][i]}</p>`;
+                            }
+                        })
+
+
+        function updateSelection() {
+            
+
+            let select = select_laptop.getAttribute("data-id");
+            let id = select_laptop.options[select_laptop.selectedIndex].id;
+            let title_desc = document.querySelectorAll("#title_desc>p");
+            let price = document.querySelector("#price");
+            let lapimg = document.querySelector("#lapimg");
+            fetch("https://hickory-quilled-actress.glitch.me/computers")
+                        .then(dt => dt.json())
+                        .then(res => {
+                            let data = res[Number(id)-1];
+
+                        data.specs.forEach(spec => {
+                            features.innerHTML += `<p>${spec}</p>`;
+                        });
+
+                        title_desc[0].innerText = data.title;
+                        title_desc[1].innerText = data.description;
+                        price.innerText = data.price + " €";
+                        const index = data.image.indexOf("5.jpg")
+                        
+                        index !== -1 ? lapimg.src = "https://m.media-amazon.com/images/I/611D4Es9L2S._SY450_.jpg" : lapimg.src = "https://hickory-quilled-actress.glitch.me/"+data.image;
+
+            })
+            features.innerText = '';
+        }
+</script>
+
+</body>
+</html>
